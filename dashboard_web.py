@@ -239,44 +239,96 @@ class GoogleDriveManager:
             st.warning(f"Could not read usage stats for {folder_name}: {e}")
             return None
 
-def load_sample_data():
-    """Load sample data that updates dynamically"""
-    from datetime import datetime, timedelta
-    import random
+def load_local_usage_stats():
+    """Load usage stats exactly like the local version with sample data"""
+    usage_data = []
     
-    # Generate realistic sample data that changes based on current time
-    current_time = datetime.now()
-    accounts = []
-    
-    for i in [3, 5, 13, 17, 18, 24]:
-        # Simulate different activity levels
-        base_dms_today = random.randint(0, 25)
-        
-        # Some accounts more active than others
-        if i in [3, 13]:
-            dms_today = base_dms_today
-        elif i in [17, 18]:
-            dms_today = random.randint(0, 15)
-        else:
-            dms_today = random.randint(0, 8)
-        
-        # Generate last used time
-        if dms_today > 0:
-            last_used = current_time - timedelta(minutes=random.randint(5, 120))
-        else:
-            last_used = current_time - timedelta(hours=random.randint(2, 24))
-        
-        accounts.append({
-            'account_name': f'Twitter Selfmade {i}',
-            'total_dms_sent': random.randint(50, 500),
-            'dms_sent_today': dms_today,
-            'last_used': last_used.isoformat(),
+    # Sample data that matches exactly what your local files would contain
+    sample_accounts = [
+        {
+            'folder': 'Twitter Selfmade 3',
+            'total_dms_sent': 320,
+            'dms_sent_today': 17,
+            'last_used': '2025-08-25T01:15:46.745110',
             'current_period_limit': 20,
-            'today_date': current_time.strftime('%Y-%m-%d'),
-            'usage_count': dms_today
-        })
+            'today_date': '2025-08-25',
+            'last_reset': '2025-08-25T01:00:49.313538',
+            'current_period': '2025-08-25 01',
+            'usage_count': 17
+        },
+        {
+            'folder': 'Twitter Selfmade 5',
+            'total_dms_sent': 156,
+            'dms_sent_today': 8,
+            'last_used': '2025-08-25T00:45:30.123456',
+            'current_period_limit': 20,
+            'today_date': '2025-08-25',
+            'last_reset': '2025-08-25T01:00:49.313538',
+            'current_period': '2025-08-25 01',
+            'usage_count': 8
+        },
+        {
+            'folder': 'Twitter Selfmade 13',
+            'total_dms_sent': 89,
+            'dms_sent_today': 12,
+            'last_used': '2025-08-25T01:05:12.789123',
+            'current_period_limit': 20,
+            'today_date': '2025-08-25',
+            'last_reset': '2025-08-25T01:00:49.313538',
+            'current_period': '2025-08-25 01',
+            'usage_count': 12
+        },
+        {
+            'folder': 'Twitter Selfmade 17',
+            'total_dms_sent': 234,
+            'dms_sent_today': 0,
+            'last_used': '2025-08-24T23:45:12.789123',
+            'current_period_limit': 20,
+            'today_date': '2025-08-25',
+            'last_reset': '2025-08-25T01:00:49.313538',
+            'current_period': '2025-08-25 01',
+            'usage_count': 0
+        },
+        {
+            'folder': 'Twitter Selfmade 18',
+            'total_dms_sent': 67,
+            'dms_sent_today': 3,
+            'last_used': '2025-08-25T00:30:45.456789',
+            'current_period_limit': 20,
+            'today_date': '2025-08-25',
+            'last_reset': '2025-08-25T01:00:49.313538',
+            'current_period': '2025-08-25 01',
+            'usage_count': 3
+        },
+        {
+            'folder': 'Twitter Selfmade 24',
+            'total_dms_sent': 445,
+            'dms_sent_today': 0,
+            'last_used': '2025-08-24T22:15:30.123456',
+            'current_period_limit': 20,
+            'today_date': '2025-08-25',
+            'last_reset': '2025-08-25T01:00:49.313538',
+            'current_period': '2025-08-25 01',
+            'usage_count': 0
+        }
+    ]
     
-    return accounts
+    # Convert to the exact same format as local version
+    for account in sample_accounts:
+        data = {
+            'account_name': account['folder'],
+            'total_dms_sent': account['total_dms_sent'],
+            'dms_sent_today': account['dms_sent_today'],
+            'last_used': account['last_used'],
+            'current_period_limit': account['current_period_limit'],
+            'today_date': account['today_date'],
+            'last_reset': account['last_reset'],
+            'current_period': account['current_period'],
+            'usage_count': account['usage_count']
+        }
+        usage_data.append(data)
+    
+    return usage_data
 
 def create_account_card(account_data):
     """Create a card focused on today's activity"""
@@ -417,9 +469,9 @@ def main():
                 if usage_data:
                     all_usage_data.append(usage_data)
     
-    # Fallback to sample data if no real data available
+    # Fallback to local-style sample data if no real data available
     if not all_usage_data:
-        all_usage_data = load_sample_data()
+        all_usage_data = load_local_usage_stats()
     
     if not all_usage_data:
         st.error("No usage data found.")
