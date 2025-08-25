@@ -1,0 +1,14 @@
+[global]
+developmentMode = false
+
+[server]
+headless = true
+port = $PORT
+enableCORS = false
+enableXsrfProtection = false
+
+[theme]
+primaryColor = "#3498db"
+backgroundColor = "#2c3e50"
+secondaryBackgroundColor = "#34495e"
+textColor = "#ffffff" 
